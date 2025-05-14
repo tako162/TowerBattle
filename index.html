@@ -1,61 +1,48 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="jp">
 
 <head>
   <meta charset="utf-8">
-  <title>いでぐちタワー</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="いでぐちタワー">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="favicon.ico" sizes="180x180">
-  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="favicon.png" type="image/x-icon">
+  <link rel="apple-touch-icon" href="favicon.png" sizes="180x180">
+  <title>いでぐちタワー</title>
 </head>
 
-<body>
-  <div id="unity-container" class="unity-desktop">
-    <canvas id="unity-canvas" width=1080 height=810 tabindex="-1"></canvas>
-    <div id="unity-loading-bar">
-      <div id="unity-logo" style="background-image: url('unity-logo-light.png');"></div>
-      <div id="unity-progress-bar-empty">
-        <div id="unity-progress-bar-full"></div>
-      </div>
-    </div>
-    <div id="unity-warning"> </div>
-  </div>
-
+<body style="background: #231F20; text-align:cantor; margin: 0;">
+  <canvas id="unity-canvas" width=1080 height=810 tabindex="-1"
+    style="width: 1080px; height: 810px; background: #231F20; position:absolute; top:0; bottom:0; left:0; right:0; margin:auto;"></canvas>
   <script src="Build/Build.loader.js"></script>
   <script>
-    const container = document.querySelector("#unity-container");
-    const canvas = document.querySelector("#unity-canvas");
-    const loadingBar = document.querySelector("#unity-loading-bar");
-    const progressBarFull = document.querySelector("#unity-progress-bar-full");
-
     if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-      container.className = "unity-mobile";
-      canvas.className = "unity-mobile";
-    } else {
-      canvas.style.width = "1080px";
-      canvas.style.height = "810px";
+      // Mobile device style: fill the whole browser client area with the game canvas:
+      var meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+
+      var canvas = document.querySelector("#unity-canvas");
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      canvas.style.position = "fixed";
+
+      document.body.style.textAlign = "left";
     }
 
-    loadingBar.style.display = "block";
-
-    createUnityInstance(canvas, {
+    createUnityInstance(document.querySelector("#unity-canvas"), {
       dataUrl: "Build/Build.data",
       frameworkUrl: "Build/Build.framework.js",
       codeUrl: "Build/Build.wasm",
       streamingAssetsUrl: "StreamingAssets",
       companyName: "DefaultCompany",
       productName: "TowerBattle",
-      productVersion: "1.2.2"
-    }, (progress) => {
-      progressBarFull.style.width = (progress * 100) + "%";
-    }).then((unityInstance) => {
-      loadingBar.style.display = "none";
-    }).catch((message) => {
-      alert("Unity ロードエラー: " + message);
+      productVersion: "0.6.0",
+      // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+      // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
     });
   </script>
 </body>
